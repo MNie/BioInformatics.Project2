@@ -3,6 +3,7 @@
 open Expecto
 open BioInformatics.Project2.Core.Sequence
 open BioInformatics.Project2.Core.SequenceAligner
+open BioInformatics.Project2.Core.LCS
 [<Tests>]
 let tests =
     testList "All" [
@@ -84,6 +85,24 @@ let tests =
                 Expect.containsAll result.[2, 0..] [|-4.0;0.0;1.0;-1.0;-3.0|] "should return valid values in 3 row"
                 Expect.containsAll result.[3, 0..] [|-6.0;-2.0;-1.0;0.0;-2.0|] "should return valid values in 4 row"
                 Expect.containsAll result.[4, 0..] [|-8.0;-4.0;-3.0;-2.0;2.0|] "should return valid values in 5 row"
+        ]
+
+        testList "LCS" [
+            testCase "when trying to get longest subsequence from ABCDGH and AEDFHR" <| fun _ ->
+                let first = Sequence(SequenceType.DNA, "ABCDGH")
+                let second = Sequence(SequenceType.DNA, "AEDFHR")
+                let lcs = LCS()
+                let result = lcs.Count(first, second)
+
+                Expect.equal result 3 "should return 3"
+
+            testCase "when trying to get longest subsequence from AGGTAB and GXTXAYB" <| fun _ ->
+                let first = Sequence(SequenceType.DNA, "GXTXAYB")
+                let second = Sequence(SequenceType.DNA, "GTAB")
+                let lcs = LCS()
+                let result = lcs.Count(first, second)
+
+                Expect.equal result 4 "should return 4"
         ]
     ]
 
