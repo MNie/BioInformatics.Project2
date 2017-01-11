@@ -1,6 +1,6 @@
 ﻿namespace BioInformatics.Project2.Core.Sequence
 open System
-type SequenceType = RNA | DNA
+type SequenceType = RNA = 0 | DNA = 1
 
 type Sequence (seqType: SequenceType, data: string) =
     member val Type = seqType with get
