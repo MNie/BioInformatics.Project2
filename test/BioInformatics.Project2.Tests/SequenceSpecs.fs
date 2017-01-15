@@ -80,11 +80,39 @@ let tests =
                 let aligner = SequenceAligner(ins, del, sub)
                 let result = aligner.Align(first, second)
 
-                Expect.containsAll result.[0, 0..] [|0.0;-2.0;-4.0;-6.0;-8.0|] "should return valid values in 1 row"
-                Expect.containsAll result.[1, 0..] [|-2.0;2.0;0.0;-2.0;-4.0|] "should return valid values in 2 row"
-                Expect.containsAll result.[2, 0..] [|-4.0;0.0;1.0;-1.0;-3.0|] "should return valid values in 3 row"
-                Expect.containsAll result.[3, 0..] [|-6.0;-2.0;-1.0;0.0;-2.0|] "should return valid values in 4 row"
-                Expect.containsAll result.[4, 0..] [|-8.0;-4.0;-3.0;-2.0;2.0|] "should return valid values in 5 row"
+                Expect.containsAll result [|-8.0;-4.0;-3.0;-2.0;2.0|] "should return valid values in 5 row"
+        ]
+
+        testList "SequenceGapAligner" [
+            testCase "when trying to align sequences by gap penalty function" <| fun _ ->
+                let first = Sequence(SequenceType.DNA, "-AGAG-TCAATCCATAG")
+                let second = Sequence(SequenceType.DNA, "CAGAGGTCCATC-ATG-")
+                let theSame =
+                    2.0
+                let different =
+                    0.0
+                let gapPenalty (element: int) = 
+                    (element |> float) + 2.0
+
+                let aligner = SequenceGapAligner(theSame, different, gapPenalty)
+                let result = aligner.Align(first, second)
+
+                Expect.equal result 10.0 "should return exactly 10"
+
+            testCase "when trying to align sequences by gap penalty function" <| fun _ ->
+                let first = Sequence(SequenceType.DNA, "------AGAGTCAATCCATAG")
+                let second = Sequence(SequenceType.DNA, "CAGAGG----TCCATCATG--")
+                let theSame =
+                    2.0
+                let different =
+                    0.0
+                let gapPenalty (element: int) = 
+                    (element |> float) + 2.0
+
+                let aligner = SequenceGapAligner(theSame, different, gapPenalty)
+                let result = aligner.Align(first, second)
+
+                Expect.equal result -8.0 "should return exactly -8"
         ]
 
         testList "LCS" [
