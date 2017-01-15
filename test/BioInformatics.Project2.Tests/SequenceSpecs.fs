@@ -3,6 +3,7 @@
 open Expecto
 open BioInformatics.Project2.Core.Sequence
 open BioInformatics.Project2.Core.SequenceAligner
+open BioInformatics.Project2.Core.SequenceGapAligner
 open BioInformatics.Project2.Core.LCS
 [<Tests>]
 let tests =
